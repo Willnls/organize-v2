@@ -179,70 +179,70 @@
     </div>
 
     <script src="./Scripts/index.js">
-    // Variáveis globais
-    let cards = [];
-    let draggedCard = null;
+        // Variáveis globais
+        let cards = [];
+        let draggedCard = null;
 
-    // Elementos do DOM
-    const board = document.getElementById('board');
-    const columns = document.querySelectorAll('.column');
-    const newTaskBtn = document.getElementById('newTaskBtn');
-    const taskModal = document.getElementById('taskModal');
-    const closeModal = document.getElementById('closeModal');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const taskForm = document.getElementById('taskForm');
-    const modalTitle = document.getElementById('modalTitle');
+        // Elementos do DOM
+        const board = document.getElementById('board');
+        const columns = document.querySelectorAll('.column');
+        const newTaskBtn = document.getElementById('newTaskBtn');
+        const taskModal = document.getElementById('taskModal');
+        const closeModal = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const taskForm = document.getElementById('taskForm');
+        const modalTitle = document.getElementById('modalTitle');
 
-    // Funções
-    async function fetchCards() {
-    try {
-    const response = await fetch('http://localhost:3000/api/cards');
-    if (!response.ok) throw new Error('Falha ao buscar cards');
+        // Funções
+        async function fetchCards() {
+            try {
+                const response = await fetch('http://localhost:3000/api/cards');
+                if (!response.ok) throw new Error('Falha ao buscar cards');
 
-    const data = await response.json();
-    if (data.success) {
-    cards = data.data;
-    renderCards();
-    updateCounts();
-    }
-    } catch (error) {
-    console.error('Erro:', error);
-    alert('Falha ao carregar tarefas. Tente novamente.');
-    }
-    }
+                const data = await response.json();
+                if (data.success) {
+                    cards = data.data;
+                    renderCards();
+                    updateCounts();
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Falha ao carregar tarefas. Tente novamente.');
+            }
+        }
 
-    function renderCards() {
-    // Limpa todos os cards
-    document.querySelectorAll('[id$="-cards"]').forEach(container => {
-    container.innerHTML = '';
-    });
+        function renderCards() {
+            // Limpa todos os cards
+            document.querySelectorAll('[id$="-cards"]').forEach(container => {
+                container.innerHTML = '';
+            });
 
-    // Renderiza cada card na coluna apropriada
-    cards.forEach(card => {
-    const columnId = `${card.status}-cards`;
-    const column = document.getElementById(columnId);
-    if (column) {
-    column.appendChild(createCardElement(card));
-    }
-    });
-    }
+            // Renderiza cada card na coluna apropriada
+            cards.forEach(card => {
+                const columnId = `${card.status}-cards`;
+                const column = document.getElementById(columnId);
+                if (column) {
+                    column.appendChild(createCardElement(card));
+                }
+            });
+        }
 
-    function createCardElement(card) {
-    const cardElement = document.createElement('div');
-    cardElement.className = 'bg-white p-4 rounded-lg shadow-sm card';
-    cardElement.draggable = true;
-    cardElement.dataset.id = card.id;
+        function createCardElement(card) {
+            const cardElement = document.createElement('div');
+            cardElement.className = 'bg-white p-4 rounded-lg shadow-sm card';
+            cardElement.draggable = true;
+            cardElement.dataset.id = card.id;
 
-    // Mapeia prioridades para classes e textos
-    const priorityMap = {
-    high: { class: 'bg-red-100 text-red-600', text: 'Alta' },
-    medium: { class: 'bg-yellow-100 text-yellow-600', text: 'Média' },
-    low: { class: 'bg-green-100 text-green-600', text: 'Baixa' }
-    };
+            // Mapeia prioridades para classes e textos
+            const priorityMap = {
+                high: { class: 'bg-red-100 text-red-600', text: 'Alta' },
+                medium: { class: 'bg-yellow-100 text-yellow-600', text: 'Média' },
+                low: { class: 'bg-green-100 text-green-600', text: 'Baixa' }
+            };
 
-    const priority = priorityMap[card.priority] || { class: 'bg-gray-100 text-gray-600', text: 'Sem prioridade' };
+            const priority = priorityMap[card.priority] || { class: 'bg-gray-100 text-gray-600', text: 'Sem prioridade' };
 
-    cardElement.innerHTML = `
+            cardElement.innerHTML = `
     <div class="flex justify-between items-start mb-2">
         <span class="px-2 py-1 text-xs ${priority.class} rounded">${priority.text}</span>
         <div>
