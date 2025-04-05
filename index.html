@@ -25,7 +25,7 @@
                         </li>
                         <li class="flex items-center space-x-2 p-2 hover:bg-blue-800 rounded">
                             <i class="fas fa-tasks"></i>
-                            <span>Projetos</span>
+                            <span>VIADO QUEM LEU</span>
                         </li>
                         <li class="flex items-center space-x-2 p-2 hover:bg-blue-800 rounded">
                             <i class="far fa-calendar"></i>
@@ -265,221 +265,221 @@
         </div>
         <span class="text-sm ${card.status === 'done' ? 'text-gray-500' : 'text-blue-600'}">
             ${card.status === 'done' ? 'Concluído' : (card.dueDate ? `Vence em ${new
-            Date(card.dueDate).toLocaleDateString()}` : 'Sem data')}
+                    Date(card.dueDate).toLocaleDateString()}` : 'Sem data')}
         </span>
     </div>
     `;
 
-    // Adiciona eventos de drag
-    cardElement.addEventListener('dragstart', handleDragStart);
-    cardElement.addEventListener('dragend', handleDragEnd);
+            // Adiciona eventos de drag
+            cardElement.addEventListener('dragstart', handleDragStart);
+            cardElement.addEventListener('dragend', handleDragEnd);
 
-    return cardElement;
-    }
+            return cardElement;
+        }
 
-    function updateCounts() {
-    const counts = {
-    'todo': 0,
-    'in-progress': 0,
-    'review': 0,
-    'done': 0
-    };
+        function updateCounts() {
+            const counts = {
+                'todo': 0,
+                'in-progress': 0,
+                'review': 0,
+                'done': 0
+            };
 
-    cards.forEach(card => {
-    counts[card.status]++;
-    });
+            cards.forEach(card => {
+                counts[card.status]++;
+            });
 
-    Object.keys(counts).forEach(status => {
-    const countElement = document.getElementById(`${status}-count`);
-    if (countElement) {
-    countElement.textContent = counts[status];
-    }
-    });
-    }
+            Object.keys(counts).forEach(status => {
+                const countElement = document.getElementById(`${status}-count`);
+                if (countElement) {
+                    countElement.textContent = counts[status];
+                }
+            });
+        }
 
-    async function handleCardUpdate(cardId, updates) {
-    try {
-    const response = await fetch(`http://localhost:3000/api/cards/${cardId}`, {
-    method: 'PUT',
-    headers: {
-    'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(updates)
-    });
+        async function handleCardUpdate(cardId, updates) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/cards/${cardId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updates)
+                });
 
-    if (!response.ok) throw new Error('Falha ao atualizar card');
+                if (!response.ok) throw new Error('Falha ao atualizar card');
 
-    const data = await response.json();
-    if (data.success) {
-    fetchCards(); // Recarrega os cards
-    }
-    } catch (error) {
-    console.error('Erro:', error);
-    alert('Falha ao atualizar tarefa. Tente novamente.');
-    }
-    }
+                const data = await response.json();
+                if (data.success) {
+                    fetchCards(); // Recarrega os cards
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Falha ao atualizar tarefa. Tente novamente.');
+            }
+        }
 
-    async function handleCardDelete(cardId) {
-    if (!confirm('Tem certeza que deseja excluir esta tarefa?')) return;
+        async function handleCardDelete(cardId) {
+            if (!confirm('Tem certeza que deseja excluir esta tarefa?')) return;
 
-    try {
-    const response = await fetch(`http://localhost:3000/api/cards/${cardId}`, {
-    method: 'DELETE'
-    });
+            try {
+                const response = await fetch(`http://localhost:3000/api/cards/${cardId}`, {
+                    method: 'DELETE'
+                });
 
-    if (!response.ok) throw new Error('Falha ao deletar card');
+                if (!response.ok) throw new Error('Falha ao deletar card');
 
-    const data = await response.json();
-    if (data.success) {
-    fetchCards(); // Recarrega os cards
-    }
-    } catch (error) {
-    console.error('Erro:', error);
-    alert('Falha ao excluir tarefa. Tente novamente.');
-    }
-    }
+                const data = await response.json();
+                if (data.success) {
+                    fetchCards(); // Recarrega os cards
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Falha ao excluir tarefa. Tente novamente.');
+            }
+        }
 
-    async function handleCardCreate(newCard) {
-    try {
-    const response = await fetch('http://localhost:3000/api/cards', {
-    method: 'POST',
-    headers: {
-    'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(newCard)
-    });
+        async function handleCardCreate(newCard) {
+            try {
+                const response = await fetch('http://localhost:3000/api/cards', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(newCard)
+                });
 
-    if (!response.ok) throw new Error('Falha ao criar card');
+                if (!response.ok) throw new Error('Falha ao criar card');
 
-    const data = await response.json();
-    if (data.success) {
-    fetchCards(); // Recarrega os cards
-    }
-    } catch (error) {
-    console.error('Erro:', error);
-    alert('Falha ao criar tarefa. Tente novamente.');
-    }
-    }
+                const data = await response.json();
+                if (data.success) {
+                    fetchCards(); // Recarrega os cards
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Falha ao criar tarefa. Tente novamente.');
+            }
+        }
 
-    function openModal(card = null) {
-    if (card) {
-    // Modo edição
-    modalTitle.textContent = 'Editar Tarefa';
-    document.getElementById('cardId').value = card.id;
-    document.getElementById('title').value = card.title;
-    document.getElementById('description').value = card.description || '';
-    document.getElementById('priority').value = card.priority || 'medium';
-    document.getElementById('assignee').value = card.assignee || '';
-    document.getElementById('dueDate').value = card.dueDate || '';
-    } else {
-    // Modo criação
-    modalTitle.textContent = 'Nova Tarefa';
-    taskForm.reset();
-    document.getElementById('cardId').value = '';
-    }
-    taskModal.classList.remove('hidden');
-    }
+        function openModal(card = null) {
+            if (card) {
+                // Modo edição
+                modalTitle.textContent = 'Editar Tarefa';
+                document.getElementById('cardId').value = card.id;
+                document.getElementById('title').value = card.title;
+                document.getElementById('description').value = card.description || '';
+                document.getElementById('priority').value = card.priority || 'medium';
+                document.getElementById('assignee').value = card.assignee || '';
+                document.getElementById('dueDate').value = card.dueDate || '';
+            } else {
+                // Modo criação
+                modalTitle.textContent = 'Nova Tarefa';
+                taskForm.reset();
+                document.getElementById('cardId').value = '';
+            }
+            taskModal.classList.remove('hidden');
+        }
 
-    // Event Handlers
-    function handleDragStart(e) {
-    draggedCard = this;
-    this.classList.add('dragging');
-    e.dataTransfer.setData('text/plain', this.dataset.id);
-    }
+        // Event Handlers
+        function handleDragStart(e) {
+            draggedCard = this;
+            this.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', this.dataset.id);
+        }
 
-    function handleDragEnd() {
-    this.classList.remove('dragging');
-    draggedCard = null;
-    }
+        function handleDragEnd() {
+            this.classList.remove('dragging');
+            draggedCard = null;
+        }
 
-    function handleDragOver(e) {
-    e.preventDefault();
-    this.classList.add('drop-target');
-    }
+        function handleDragOver(e) {
+            e.preventDefault();
+            this.classList.add('drop-target');
+        }
 
-    function handleDragEnter(e) {
-    e.preventDefault();
-    }
+        function handleDragEnter(e) {
+            e.preventDefault();
+        }
 
-    function handleDragLeave() {
-    this.classList.remove('drop-target');
-    }
+        function handleDragLeave() {
+            this.classList.remove('drop-target');
+        }
 
-    async function handleDrop(e) {
-    e.preventDefault();
-    this.classList.remove('drop-target');
+        async function handleDrop(e) {
+            e.preventDefault();
+            this.classList.remove('drop-target');
 
-    const cardId = e.dataTransfer.getData('text/plain');
-    const newStatus = this.dataset.status;
+            const cardId = e.dataTransfer.getData('text/plain');
+            const newStatus = this.dataset.status;
 
-    if (cardId && newStatus) {
-    await handleCardUpdate(cardId, { status: newStatus });
-    }
-    }
+            if (cardId && newStatus) {
+                await handleCardUpdate(cardId, { status: newStatus });
+            }
+        }
 
-    function handleFormSubmit(e) {
-    e.preventDefault();
+        function handleFormSubmit(e) {
+            e.preventDefault();
 
-    const cardId = document.getElementById('cardId').value;
-    const cardData = {
-    title: document.getElementById('title').value,
-    description: document.getElementById('description').value,
-    priority: document.getElementById('priority').value,
-    assignee: document.getElementById('assignee').value,
-    dueDate: document.getElementById('dueDate').value
-    };
+            const cardId = document.getElementById('cardId').value;
+            const cardData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value,
+                priority: document.getElementById('priority').value,
+                assignee: document.getElementById('assignee').value,
+                dueDate: document.getElementById('dueDate').value
+            };
 
-    if (cardId) {
-    // Editar card existente
-    handleCardUpdate(cardId, cardData);
-    } else {
-    // Criar novo card
-    cardData.status = 'todo'; // Novo card sempre começa como "todo"
-    handleCardCreate(cardData);
-    }
+            if (cardId) {
+                // Editar card existente
+                handleCardUpdate(cardId, cardData);
+            } else {
+                // Criar novo card
+                cardData.status = 'todo'; // Novo card sempre começa como "todo"
+                handleCardCreate(cardData);
+            }
 
-    taskModal.classList.add('hidden');
-    }
+            taskModal.classList.add('hidden');
+        }
 
-    function handleClickOutsideModal(e) {
-    if (e.target === taskModal) {
-    taskModal.classList.add('hidden');
-    }
-    }
+        function handleClickOutsideModal(e) {
+            if (e.target === taskModal) {
+                taskModal.classList.add('hidden');
+            }
+        }
 
-    function handleDocumentClick(e) {
-    // Editar card
-    if (e.target.closest('.edit-btn')) {
-    const cardId = e.target.closest('.edit-btn').dataset.id;
-    const card = cards.find(c => c.id === cardId);
-    if (card) openModal(card);
-    }
+        function handleDocumentClick(e) {
+            // Editar card
+            if (e.target.closest('.edit-btn')) {
+                const cardId = e.target.closest('.edit-btn').dataset.id;
+                const card = cards.find(c => c.id === cardId);
+                if (card) openModal(card);
+            }
 
-    // Excluir card
-    if (e.target.closest('.delete-btn')) {
-    const cardId = e.target.closest('.delete-btn').dataset.id;
-    if (cardId) handleCardDelete(cardId);
-    }
-    }
+            // Excluir card
+            if (e.target.closest('.delete-btn')) {
+                const cardId = e.target.closest('.delete-btn').dataset.id;
+                if (cardId) handleCardDelete(cardId);
+            }
+        }
 
-    // Event Listeners
-    document.addEventListener('DOMContentLoaded', fetchCards);
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', fetchCards);
 
-    newTaskBtn.addEventListener('click', () => openModal());
-    closeModal.addEventListener('click', () => taskModal.classList.add('hidden'));
-    cancelBtn.addEventListener('click', () => taskModal.classList.add('hidden'));
-    taskModal.addEventListener('click', handleClickOutsideModal);
-    taskForm.addEventListener('submit', handleFormSubmit);
-    document.addEventListener('click', handleDocumentClick);
+        newTaskBtn.addEventListener('click', () => openModal());
+        closeModal.addEventListener('click', () => taskModal.classList.add('hidden'));
+        cancelBtn.addEventListener('click', () => taskModal.classList.add('hidden'));
+        taskModal.addEventListener('click', handleClickOutsideModal);
+        taskForm.addEventListener('submit', handleFormSubmit);
+        document.addEventListener('click', handleDocumentClick);
 
-    // Drag and Drop
-    columns.forEach(column => {
-    column.addEventListener('dragover', handleDragOver);
-    column.addEventListener('dragenter', handleDragEnter);
-    column.addEventListener('dragleave', handleDragLeave);
-    column.addEventListener('drop', handleDrop);
-    });
-    </script> 
+        // Drag and Drop
+        columns.forEach(column => {
+            column.addEventListener('dragover', handleDragOver);
+            column.addEventListener('dragenter', handleDragEnter);
+            column.addEventListener('dragleave', handleDragLeave);
+            column.addEventListener('drop', handleDrop);
+        });
+    </script>
 </body>
 
 </html>
