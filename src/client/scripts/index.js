@@ -297,3 +297,4 @@ columns.forEach(column => {
     column.addEventListener('dragleave', handleDragLeave);
     column.addEventListener('drop', handleDrop);
 });
+

@@ -1,62 +1,26 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
+// src/api/controllers/cardsController.js
+const { generateId } = require('../utils/generateId');
 
-const app = express();
+let cards = []; // Banco de dados em memória
 
-// Middlewares
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static(__dirname)); // Serve arquivos estáticos (incluindo index.html)
-
-// Banco de dados em memória (simulado)
-let cards = [
-    // {
-    //     id: '1',
-    //     title: 'Update user interface design',
-    //     description: 'Implement new design system across all pages',
-    //     status: 'todo',
-    //     priority: 'high',
-    //     assignee: 'Sarah',
-    //     dueDate: '2023-12-01',
-    //     createdAt: new Date().toISOString()
-    // },
-    // {
-    //     id: '2',
-    //     title: 'API Integration',
-    //     description: 'Connect backend APIs with frontend',
-    //     status: 'in-progress',
-    //     priority: 'medium',
-    //     assignee: 'Michael',
-    //     dueDate: '2023-12-03',
-    //     createdAt: new Date().toISOString()
-    // }
-];
-
-// Gerador de ID simples
-const generateId = () => Math.random().toString(36).substring(2, 9);
-
-// Rota principal serve o index.html
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
-});
-
-// Rotas para Cards
-app.get('/api/cards', (req, res) => {
+exports.getCards = (req, res) => {
     try {
         res.status(200).json({
             success: true,
             data: cards
         });
+
+        console.log(`[INFO] Cards: ${cards.length}`);
+
     } catch (error) {
         res.status(500).json({
             success: false,
             message: 'Failed to fetch cards'
         });
     }
-});
+};
 
-app.post('/api/cards', (req, res) => {
+exports.createCard = (req, res) => {
     try {
         const newCard = {
             id: generateId(),
@@ -64,7 +28,8 @@ app.post('/api/cards', (req, res) => {
             ...req.body
         };
 
-        cards.push(newCard);
+        cards.push(newCard);        
+        console.log(`[INFO] Cards: ${JSON.stringify(cards)}`);
 
         res.status(201).json({
             success: true,
@@ -76,9 +41,9 @@ app.post('/api/cards', (req, res) => {
             message: 'Failed to create card'
         });
     }
-});
+};
 
-app.put('/api/cards/:id', (req, res) => {
+exports.updateCard = (req, res) => {
     try {
         const { id } = req.params;
         const cardIndex = cards.findIndex(card => card.id === id);
@@ -106,9 +71,9 @@ app.put('/api/cards/:id', (req, res) => {
             message: 'Failed to update card'
         });
     }
-});
+};
 
-app.delete('/api/cards/:id', (req, res) => {
+exports.deleteCard = (req, res) => {
     try {
         const { id } = req.params;
         const cardIndex = cards.findIndex(card => card.id === id);
@@ -132,8 +97,4 @@ app.delete('/api/cards/:id', (req, res) => {
             message: 'Failed to delete card'
         });
     }
-});
-
-// Iniciar servidor
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+};
