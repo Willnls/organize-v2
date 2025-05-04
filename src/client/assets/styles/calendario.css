@@ -4,20 +4,110 @@
     font-family: 'Red Hat Display', sans-serif;
 }
 
-.card {
+/* Estilos para o calendário */
+.calendar-day {
+    min-height: 120px;
+    padding: 8px;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: white;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.calendar-day:hover {
+    background-color: #f8fafc;
+}
+
+.calendar-day.empty {
+    background-color: #f9fafb;
+    cursor: default;
+}
+
+.calendar-day.today {
+    background-color: #eff6ff;
+}
+
+.day-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.calendar-day.today .day-number {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.activity-item {
+    font-size: 11px;
+    padding: 4px 6px;
+    margin-bottom: 4px;
+    background-color: #e0f2fe;
+    border-left: 3px solid #3b82f6;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
     transition: all 0.2s ease;
 }
 
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.activity-item:hover {
+    background-color: #bae6fd;
 }
 
-.card.dragging {
+.activity-item.dragging {
     opacity: 0.5;
-    background: #f7fafc;
+    background-color: #7dd3fc;
 }
 
-.column.drop-target {
-    background: #ebf8ff;
+.activity-time {
+    font-weight: 500;
+    margin-right: 4px;
+    color: #1e40af;
+}
+
+.drop-target {
+    background-color: #f0f9ff !important;
+    outline: 2px dashed #7dd3fc;
+}
+
+.activities-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* Modal */
+#activity-modal {
+    transition: opacity 0.2s ease;
+}
+
+#activity-modal:not(.hidden) {
+    opacity: 1;
+}
+
+/* Botão de excluir */
+#delete-activity {
+    transition: all 0.2s ease;
+}
+
+#delete-activity:hover {
+    transform: scale(1.05);
+}
+
+#delete-activity:active {
+    transform: scale(0.95);
+}
+
+/* Melhorias de acessibilidade */
+button:focus, input:focus, textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px #3b82f6;
 }
