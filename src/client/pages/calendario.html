@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organize - Calendário</title>
+    <title>Organize - Calendário Interativo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/styles/calendario.css">
-
 </head>
-
-<body class="bg-gray-50">
+<body class="bg-gray-50 font-sans">
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
         <aside class="w-64 bg-blue-900 text-white hidden md:block">
@@ -19,20 +16,20 @@
                 <h1 class="text-2xl font-bold mb-8">Organize</h1>
                 <nav>
                     <ul class="space-y-2">
-                        <li class="flex items-center space-x-2 p-2 bg-blue-800 rounded">
-                            <i class="fas fa-home"></i>
-                            <span>Dashboard 2</span>
+                        <li class="flex items-center space-x-2 p-2 hover:bg-blue-800 rounded">
+                            <i class="fas fa-home w-5 text-center"></i>
+                            <span>Dashboard</span>
                         </li>
                         <li class="flex items-center space-x-2 p-2 hover:bg-blue-800 rounded">
-                            <i class="fas fa-tasks"></i>
+                            <i class="fas fa-tasks w-5 text-center"></i>
                             <span>Projeto</span>
                         </li>
-                        <li class="flex items-center space-x-2 p-2 hover:bg-blue-800 rounded">
-                            <i class="far fa-calendar"></i>
+                        <li class="flex items-center space-x-2 p-2 bg-blue-800 rounded">
+                            <i class="far fa-calendar w-5 text-center"></i>
                             <span>Calendário</span>
                         </li>
                         <li class="flex items-center space-x-2 p-2 hover:bg-blue-800 rounded">
-                            <i class="fas fa-chart-bar"></i>
+                            <i class="fas fa-chart-bar w-5 text-center"></i>
                             <span>Finanças</span>
                         </li>
                     </ul>
@@ -49,24 +46,101 @@
                     </button>
                     <div class="flex items-center space-x-4">
                         <div class="relative">
-                            <input type="text" placeholder="Pesquisa..." class="pl-10 pr-4 py-2 border rounded-lg w-64">
+                            <input type="text" placeholder="Pesquisar..." class="pl-10 pr-4 py-2 border rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
                         </div>
-                        <button id="newTaskBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        <button id="newTaskBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
                             <i class="fas fa-plus mr-2"></i>Nova tarefa
                         </button>
                     </div>
                     <div class="flex items-center space-x-4">
-                        <button class="text-gray-600"><i class="far fa-bell"></i></button>
+                        <button class="text-gray-600 hover:text-gray-800"><i class="far fa-bell"></i></button>
                         <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                             alt="Profile" class="w-8 h-8 rounded-full">
                     </div>
                 </div>
             </header>
+
+            <!-- Calendário -->
+            <div class="p-6">
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="flex items-center justify-between p-4 border-b">
+                        <div class="flex items-center space-x-4">
+                            <h2 class="text-xl font-semibold text-gray-800" id="current-month-year"></h2>
+                            <button id="today" class="px-3 py-1 text-sm rounded-md bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors">
+                                Hoje
+                            </button>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button id="prev-month" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                                <i class="fas fa-chevron-left text-gray-600"></i>
+                            </button>
+                            <button id="next-month" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                                <i class="fas fa-chevron-right text-gray-600"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dias da semana -->
+                    <div class="grid grid-cols-7 bg-gray-50 border-b">
+                        <div class="py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Dom</div>
+                        <div class="py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Seg</div>
+                        <div class="py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ter</div>
+                        <div class="py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Qua</div>
+                        <div class="py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Qui</div>
+                        <div class="py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Sex</div>
+                        <div class="py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Sáb</div>
+                    </div>
+
+                    <!-- Grid do calendário -->
+                    <div id="calendar-grid" class="grid grid-cols-7">
+                        <!-- Dias serão preenchidos via JavaScript -->
+                    </div>
+                </div>
+            </div>
         </main>
+    </div>
+
+    <!-- Modal para adicionar/editar atividade -->
+    <div id="activity-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800" id="modal-title">Adicionar Atividade</h3>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700 transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="activity-form">
+                <input type="hidden" id="activity-id">
+                <div class="mb-4">
+                    <label for="activity-date" class="block text-sm font-medium text-gray-700 mb-1">Data *</label>
+                    <input type="date" id="activity-date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                </div>
+                <div class="mb-4">
+                    <label for="activity-title" class="block text-sm font-medium text-gray-700 mb-1">Título *</label>
+                    <input type="text" id="activity-title" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                </div>
+                <div class="mb-4">
+                    <label for="activity-description" class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+                    <textarea id="activity-description" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="activity-time" class="block text-sm font-medium text-gray-700 mb-1">Horário</label>
+                    <input type="time" id="activity-time" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div class="flex justify-between items-center">
+                    <button type="button" id="delete-activity" class="text-red-600 hover:text-red-800 text-sm hidden">
+                        <i class="fas fa-trash mr-1"></i> Excluir
+                    </button>
+                    <div class="flex space-x-3">
+                        <button type="button" id="cancel-activity" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors">Cancelar</button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">Salvar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script src="../scripts/calendario.js"></script>
 </body>
-
 </html>
