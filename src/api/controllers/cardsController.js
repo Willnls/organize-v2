@@ -10,7 +10,7 @@ exports.getCards = (req, res) => {
             data: cards
         });
 
-        console.log(`[INFO] Cards: ${cards.length}`);
+        // console.log(`[INFO] Cards: ${cards.length}`);
 
     } catch (error) {
         res.status(500).json({
