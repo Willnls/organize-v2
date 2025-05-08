@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
         modalTitle: document.getElementById('modal-title'),
         deleteActivityBtn: document.getElementById('delete-activity'),
         closeModalBtn: document.getElementById('close-modal'),
-        cancelActivityBtn: document.getElementById('cancel-activity')
+        cancelActivityBtn: document.getElementById('cancel-activity'),
+        newTaskBtn: document.getElementById('newTaskBtn') // Adicionado aqui
     };
 
     // Inicialização
@@ -240,6 +241,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.target === elements.activityModal) {
                 closeModal();
             }
+        });
+
+        // Evento para o botão "Criar agenda" - NOVO
+        elements.newTaskBtn.addEventListener('click', () => {
+            openActivityModal(new Date()); // Abre o modal com a data atual
         });
     }
 
